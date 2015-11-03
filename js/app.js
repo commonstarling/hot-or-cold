@@ -18,13 +18,12 @@ function secretNumberGenerator(){
 secretNumberGenerator();
 
 /*function to capture input number*/
-$(document).on('keypress', function(key) {
-        if (key.keyCode == 13) {
+$('#guessButton').click(function() {
         	var guessedNumber = $('#userGuess').val();
         	var guessedNumberInt = parseInt(guessedNumber, 10);
+        	alert(guessedNumberInt);
         	hotCold(guessedNumberInt);
             resetForm();
-        }
 });
 
 /*function to reset input box*/

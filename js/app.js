@@ -1,6 +1,7 @@
 /*Global variable list*/
 var userGuessInt = '';
 var secretNumber = '';
+var guessCount = 0;
 
 $(document).ready(function(){
 	
@@ -27,7 +28,7 @@ function submitForm() {
 		  e.preventDefault();
 		  var userGuess = $('#userGuess').val();
 		  console.log("User guess = " + userGuess);
-		  validateNumber(userGuess);
+		  guessNumber(userGuess);
 		  resetForm();
 	})
 }
@@ -39,7 +40,7 @@ function resetForm() {
 }
 
 /*function to check if number is valid */
-function validateNumber() {
+function guessNumber() {
 	var userGuess = $('#userGuess').val();
 	var userGuessInt = parseInt(userGuess);
 		if (isNaN(userGuessInt) === true) {
@@ -53,6 +54,9 @@ function validateNumber() {
 		}
 		else {
 			hotCold(userGuessInt);
+			$('#guessList').append("<li>" + userGuessInt + "</li>");
+			guessCount++;
+			$('#count').text(guessCount);
 		}
 }
 
@@ -62,7 +66,7 @@ function hotCold(userGuessInt) {
 	var userGuessInt = parseInt(userGuess);
 	var difference = (userGuessInt - secretNumber);
 	if (difference === 0) {
-		setFeedback("You win!");
+		setFeedback("You win! Click 'New Game' to play again!");
 	}
 	else if	(difference > 0) {
 		positiveValue(userGuessInt);
@@ -135,4 +139,18 @@ function negativeValue() {
 	}
 }
 
+/*function to reset game*/
+	$(".new").click(function(){
+        resetGame();
+	});
+
+	function resetGame(){
+    	guessCount = 0;
+		$('#userGuess').val('');
+		$('#count').text(guessCount);
+		$("#guessList li").remove();
+		secretNumber = (Math.floor(Math.random()*100));
+		console.log("Secret Number = " + secretNumber);
+		setFeedback("Make your guess!");             
+	}
 });

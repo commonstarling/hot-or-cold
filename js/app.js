@@ -187,6 +187,5 @@ pastGuess(oldGuess,newGuess);
 
 //Relative comparison
 oldGuess = newGuess;
-
 	
 });

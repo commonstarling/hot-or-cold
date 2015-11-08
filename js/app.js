@@ -2,25 +2,14 @@
 var userGuessInt = '';
 var secretNumber = '';
 var guessCount = 0;
-
-$(document).ready(function(){
-	
-/*--- Display information modal box ---*/
-$(".what").click(function(){
-	$(".overlay").fadeIn(1000);
-});
-
-/*--- Hide information modal box ---*/
-$("a.close").click(function(){
-	$(".overlay").fadeOut(1000);
-});
+var oldGuess = '';
+var newGuess = userGuessInt;
 
 /*function to generate random number*/
 function secretNumberGenerator() {
     secretNumber = (Math.floor(Math.random()*100));
         console.log("Secret Number = " + secretNumber);
 }
-secretNumberGenerator();
 
 /*function to submit form*/
 function submitForm() {
@@ -32,7 +21,6 @@ function submitForm() {
 		  resetForm();
 	})
 }
-submitForm();
 
 /*function to clear input after typing number*/
 function resetForm() {
@@ -60,6 +48,28 @@ function guessNumber() {
 		}
 }
 
+/*function to compare new guess to old guess*/
+function pastGuess(oldGuess, newGuess) {
+	console.log("Old Guess = " + oldGuess);
+	console.log("New Guess = " + newGuess);
+	if (oldGuess !== "") {
+		var relativeFeedback = "";
+		//Decreasing difference of newGuess vs oldGuess
+		if (Math.abs(oldGuess - randomNumber) > Math.abs(newGuess-randomNumber)) {
+			relativeFeedback = "Getting warmer";
+		}
+
+		//Increasing difference of newGuess vs oldGuess
+		else if (Math.abs(oldGuess - randomNumber) < Math.abs(newGuess-randomNumber)) {
+			relativeFeedback = "Getting colder";
+		}
+
+		//equal difference
+		else relativeFeedback = "You're standing still";
+		$('#relativefeedback').text(relativeFeedback);
+	}
+}	
+
 /*function to weigh if guesses are hot or cold*/
 function hotCold(userGuessInt) {
 	var userGuess = $('#userGuess').val();
@@ -83,7 +93,7 @@ function setFeedback(feedback) {
 }
 
 /*function to consider numbers higher than the secret number*/
-function positiveValue() {
+function positiveValue(userGuessInt) {
 	var userGuess = $('#userGuess').val();
 	var userGuessInt = parseInt(userGuess);
 	var posDifference = (userGuessInt - secretNumber);
@@ -140,11 +150,7 @@ function negativeValue() {
 }
 
 /*function to reset game*/
-	$(".new").click(function(){
-        resetGame();
-	});
-
-	function resetGame(){
+function resetGame(){
     	guessCount = 0;
 		$('#userGuess').val('');
 		$('#count').text(guessCount);
@@ -152,5 +158,35 @@ function negativeValue() {
 		secretNumber = (Math.floor(Math.random()*100));
 		console.log("Secret Number = " + secretNumber);
 		setFeedback("Make your guess!");             
-	}
+}
+
+//Let's start
+$(document).ready(function(){
+	
+/*--- Display information modal box ---*/
+$(".what").click(function(){
+	$(".overlay").fadeIn(1000);
+});
+
+/*--- Hide information modal box ---*/
+$("a.close").click(function(){
+	$(".overlay").fadeOut(1000);
+});
+
+//Number generator
+secretNumberGenerator();
+
+//Submit form, validate number and compare number
+submitForm();
+pastGuess(oldGuess,newGuess);
+
+//Reset game
+	$(".new").click(function(){
+        resetGame();
+	});
+
+//Relative comparison
+oldGuess = newGuess;
+
+	
 });
